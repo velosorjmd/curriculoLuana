@@ -60,10 +60,8 @@
         @page {
             size: A4;
             margin: 0;
-            -webkit-print-color-adjust: exact;
-            color-adjust: exact;
         }
-        
+
         body {
             background-color: var(--color-body-bg); 
             color: theme('colors.parchment');
@@ -149,19 +147,31 @@
         }
 
         @media print {
+            html, body, * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
             body {
-                background: theme('colors.primary') !important;
-                padding: 0;
-                gap: 0;
-                display: block;
+                background-color: var(--color-primary) !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: block !important;
+                overflow: visible !important;
+                min-height: auto !important;
             }
             #cv-container {
-                gap: 0;
+                display: block !important;
                 transform: none !important;
+                width: 100% !important;
+                height: auto !important;
+                gap: 0 !important;
             }
             .a4-page {
-                box-shadow: none;
-                margin: 0;
+                box-shadow: none !important;
+                margin: 0 !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                page-break-inside: avoid !important;
             }
             .fab-container { display: none !important; }
         }
