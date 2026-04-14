@@ -14,10 +14,14 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#1A3237',   
-                        parchment: '#FAF8F5', 
-                        gold: '#D4C09A',      
-                        goldDark: '#B69D74',  
+                        primary: 'var(--color-primary)',   
+                        parchment: 'var(--color-parchment)', 
+                        gold: 'var(--color-gold)',      
+                        goldDark: 'var(--color-gold-dark)',
+                        grayBody: 'var(--color-gray-body)',
+                        grayMuted: 'var(--color-gray-muted)',
+                        glassBg: 'var(--color-glass-bg)',
+                        glassBorder: 'var(--color-glass-border)'
                     },
                     fontFamily: {
                         sans: ['Cormorant Garamond', 'serif'],
@@ -28,6 +32,31 @@
         }
     </script>
     <style type="text/tailwindcss">
+        @layer base {
+            :root {
+                --color-primary: #1A3237;
+                --color-parchment: #FAF8F5;
+                --color-gold: #D4C09A;
+                --color-gold-dark: #B69D74;
+                --color-gray-body: #d1d5db;
+                --color-gray-muted: #9ca3af;
+                --color-glass-bg: rgba(0, 0, 0, 0.05);
+                --color-glass-border: rgba(255, 255, 255, 0.05);
+                --color-body-bg: #0f172a;
+            }
+            :root.light {
+                --color-primary: #FAF8F5;
+                --color-parchment: #1A3237;
+                --color-gold: #B69D74;
+                --color-gold-dark: #D4C09A;
+                --color-gray-body: #374151;
+                --color-gray-muted: #4b5563;
+                --color-glass-bg: rgba(0, 0, 0, 0.03);
+                --color-glass-border: rgba(0, 0, 0, 0.1);
+                --color-body-bg: #e2e8f0;
+            }
+        }
+
         @page {
             size: A4;
             margin: 0;
@@ -36,7 +65,7 @@
         }
         
         body {
-            background-color: #0f172a; 
+            background-color: var(--color-body-bg); 
             color: theme('colors.parchment');
             display: flex;
             flex-direction: column; 
@@ -44,7 +73,8 @@
             gap: 3rem; 
             min-height: 100vh;
             padding: 3rem 0;
-            overflow-x: hidden; /* Evita rolagem horizontal no body */
+            overflow-x: hidden;
+            transition: background-color 0.3s ease;
         }
 
         #cv-container {
@@ -53,7 +83,6 @@
             align-items: center;
             gap: 3rem;
             width: 100%;
-            /* Ponto de origem do scale no topo central */
             transform-origin: top center; 
         }
 
@@ -66,6 +95,11 @@
             overflow: hidden;
             flex-shrink: 0;
             page-break-after: always; 
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        :root.light .a4-page {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
 
         .art-nouveau-margin {
@@ -77,6 +111,11 @@
             border: 1px solid rgba(212, 192, 154, 0.25); 
             pointer-events: none;
             z-index: 50;
+            transition: border-color 0.3s ease;
+        }
+
+        :root.light .art-nouveau-margin {
+            border: 1px solid rgba(182, 157, 116, 0.3); 
         }
 
         .arabesque {
@@ -102,6 +141,11 @@
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
             backface-visibility: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        :root.light .arched-image {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
 
         @media print {
@@ -119,11 +163,11 @@
                 box-shadow: none;
                 margin: 0;
             }
-            .fab-print { display: none !important; }
+            .fab-container { display: none !important; }
         }
     </style>
 </head>
-<body class="antialiased selection:bg-gold selection:text-primary">
+<body class="antialiased selection:bg-gold selection:text-primary transition-colors duration-300">
 
     <div id="cv-container">
         <!-- ==================== PÁGINA 1 ==================== -->
@@ -136,12 +180,12 @@
             </div>
 
             <div class="absolute top-[15mm] bottom-[15mm] left-[15mm] right-[15mm] flex z-10">
-                <main class="flex-1 px-10 py-6 flex flex-col overflow-hidden bg-black/5 backdrop-blur-sm">
+                <main class="flex-1 px-10 py-6 flex flex-col overflow-hidden bg-glassBg backdrop-blur-sm transition-colors duration-300">
                     
                     <header class="text-center mb-6 pt-2">
                         <h1 class="font-serif text-5xl font-bold text-parchment mb-1 tracking-tight">Luana Piana</h1>
-                        <p class="font-serif italic text-[1.4rem] text-gray-300 mb-4">Psicóloga Clínica de Orientação Analítica</p>
-                        <div class="font-sans text-[0.9rem] text-gray-300 flex justify-center items-center gap-6 tracking-wide">
+                        <p class="font-serif italic text-[1.4rem] text-grayBody mb-4">Psicóloga Clínica de Orientação Analítica</p>
+                        <div class="font-sans text-[0.9rem] text-grayBody flex justify-center items-center gap-6 tracking-wide">
                             <span class="lowercase">luanapianapsico@gmail.com</span>
                             <span class="text-gold text-[0.5rem] opacity-60">♦</span>
                             <span>(41) 99867-6919</span>
@@ -163,12 +207,12 @@
                         <div class="flex flex-col justify-center">
                             <img src="imagens/fotoProfissional_01.png" 
                                  alt="Luana Piana" 
-                                 class="w-full h-[220px] arched-image mb-0 border border-white/5 shadow-xl">
+                                 class="w-full h-[220px] arched-image mb-0 border border-glassBorder shadow-xl">
                         </div>
 
                         <div class="pt-1 flex flex-col justify-center">
                             <h2 class="font-serif italic text-2xl mb-3 text-parchment border-b border-gold/20 pb-2 inline-block self-start">Perfil Profissional</h2>
-                            <div class="font-sans text-[1.1rem] text-gray-300 leading-[1.6] text-justify">
+                            <div class="font-sans text-[1.1rem] text-grayBody leading-[1.6] text-justify">
                                 <p>
                                     Psicóloga clínica graduada pela UFPR e pós-graduada pela PUCPR, com oito anos de experiência clínica. Integra a profundidade da escuta analítica a recursos mente-corpo e práticas integrativas, incluindo formação em Yoga. Dedica-se à promoção da saúde mental através do acolhimento humanizado e do desenvolvimento integral do indivíduo.
                                 </p>
@@ -191,7 +235,7 @@
                                 <div class="font-sans italic text-gold text-[0.85rem] font-semibold pt-0.5 text-right mt-1">2015 — Atual</div>
                                 <div class="pl-2">
                                     <h3 class="font-serif font-bold text-[1.25rem] text-parchment leading-tight mb-2">Psicóloga Clínica</h3>
-                                    <p class="font-sans text-[1rem] text-gray-300 leading-[1.6] text-justify">
+                                    <p class="font-sans text-[1rem] text-grayBody leading-[1.6] text-justify">
                                         Atendimento psicoterapêutico fundamentado na promoção da saúde mental, integrando conhecimentos teóricos da Psicologia Analítica e recursos complementares integrativos ao cuidado clínico em consultório.
                                     </p>
                                 </div>
@@ -202,8 +246,8 @@
                                 <div class="font-sans italic text-gold text-[0.85rem] font-semibold pt-0.5 text-right mt-1">2021 — 2022</div>
                                 <div class="pl-2">
                                     <h3 class="font-serif font-bold text-[1.25rem] text-parchment leading-tight mb-1">Especialização em Psicologia Analítica</h3>
-                                    <p class="font-sans text-[0.75rem] uppercase tracking-widest text-gray-400 mb-2">Teoria e Prática • PUCPR</p>
-                                    <p class="font-sans text-[1rem] text-gray-300 leading-[1.6] text-justify">
+                                    <p class="font-sans text-[0.75rem] uppercase tracking-widest text-grayMuted mb-2">Teoria e Prática • PUCPR</p>
+                                    <p class="font-sans text-[1rem] text-grayBody leading-[1.6] text-justify">
                                         Pós-graduação focada no aprofundamento dos conceitos fundamentais de Carl G. Jung e sua aplicação clínica contemporânea.
                                     </p>
                                 </div>
@@ -214,7 +258,7 @@
                                 <div class="font-sans italic text-gold text-[0.85rem] font-semibold pt-0.5 text-right mt-1">2011 — 2015</div>
                                 <div class="pl-2">
                                     <h3 class="font-serif font-bold text-[1.25rem] text-parchment leading-tight mb-1">Bacharelado em Psicologia</h3>
-                                    <p class="font-sans text-[0.75rem] uppercase tracking-widest text-gray-400">Graduação • Universidade Federal do Paraná (UFPR)</p>
+                                    <p class="font-sans text-[0.75rem] uppercase tracking-widest text-grayMuted">Graduação • Universidade Federal do Paraná (UFPR)</p>
                                 </div>
                             </div>
                         </div>
@@ -235,11 +279,11 @@
             </div>
 
             <div class="absolute top-[15mm] bottom-[15mm] left-[15mm] right-[15mm] flex z-10">
-                <main class="flex-1 px-10 py-6 flex flex-col bg-black/5 backdrop-blur-sm overflow-hidden">
+                <main class="flex-1 px-10 py-6 flex flex-col bg-glassBg backdrop-blur-sm overflow-hidden transition-colors duration-300">
                     
                     <header class="mb-5 flex justify-between items-center border-b border-gold/20 pb-2">
                         <span class="font-serif italic text-gold text-[1.1rem]">Luana Piana</span>
-                        <span class="font-sans uppercase tracking-[0.2em] text-[0.65rem] text-gray-400">Curriculum Vitae</span>
+                        <span class="font-sans uppercase tracking-[0.2em] text-[0.65rem] text-grayMuted">Curriculum Vitae</span>
                     </header>
 
                     <!-- 1. Extensão & Estágio -->
@@ -254,21 +298,21 @@
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2015 • Estágio Obrigatório</span>
                                 <h3 class="font-serif italic text-[1.1rem] text-parchment mb-1.5 leading-tight">Observação Institucional</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Análise de casas de acolhimento municipal e práticas de cuidado. Levantamento de dados para subsidiar programas de capacitação direcionados às equipes assistenciais.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Análise de casas de acolhimento municipal e práticas de cuidado. Levantamento de dados para subsidiar programas de capacitação direcionados às equipes assistenciais.</p>
                             </div>
 
                             <div class="relative pl-5 border-l border-gold/30">
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2014 — 2015</span>
                                 <h3 class="font-serif italic text-[1.1rem] text-parchment mb-1.5 leading-tight">Grupos de Pais</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Condução de grupos voltados ao acolhimento das experiências parentais, promovendo educação positiva, fortalecimento de vínculos e estratégias de manejo respeitoso.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Condução de grupos voltados ao acolhimento das experiências parentais, promovendo educação positiva, fortalecimento de vínculos e estratégias de manejo respeitoso.</p>
                             </div>
 
                             <div class="relative pl-5 border-l border-gold/30">
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2013 — 2014 • Escolas Municipais</span>
                                 <h3 class="font-serif italic text-[1.1rem] text-parchment mb-1.5 leading-tight">Habilidades Sociais na Infância</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Desenvolvimento de grupos escolares focados na promoção de competências interpessoais e regulação emocional no contexto educacional.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Desenvolvimento de grupos escolares focados na promoção de competências interpessoais e regulação emocional no contexto educacional.</p>
                             </div>
                         </div>
                     </section>
@@ -285,28 +329,28 @@
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2026 • Estudos Integrativos</span>
                                 <h3 class="font-serif italic text-[1.1rem] text-parchment mb-1.5 leading-tight">Práticas Integrativas na Clínica</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Articulação teórico-prática de recursos complementares em saúde mental (corpo, homeopatia e psiquiatria) sob orientação da analista didata Isabel C. Fochesato.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Articulação teórico-prática de recursos complementares em saúde mental (corpo, homeopatia e psiquiatria) sob orientação da analista didata Isabel C. Fochesato.</p>
                             </div>
 
                             <div class="relative pl-5 border-l border-gold/30">
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2025 • Psicologia do Desenvolvimento</span>
                                 <h3 class="font-serif italic text-[1.1rem] text-parchment mb-1.5 leading-tight">Grupo: "A criança como indivíduo"</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Estudos especializados no desenvolvimento psíquico infantil na abordagem Analítica, orientados pela analista didata Isabel C. Fochesato.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Estudos especializados no desenvolvimento psíquico infantil na abordagem Analítica, orientados pela analista didata Isabel C. Fochesato.</p>
                             </div>
 
                             <div class="relative pl-5 border-l border-gold/30">
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2026 • Formação Mente-Corpo</span>
                                 <h3 class="font-serif italic text-[1.1rem] text-parchment mb-1.5 leading-tight">Formação em Yoga</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Centro de Estudos e Práticas em Yoga, Curitiba-PR. Foco em regulação emocional e somática aplicada ao cuidado integral em saúde mental.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Centro de Estudos e Práticas em Yoga, Curitiba-PR. Foco em regulação emocional e somática aplicada ao cuidado integral em saúde mental.</p>
                             </div>
 
                             <div class="relative pl-5 border-l border-gold/30">
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2025 • Congresso Nacional</span>
                                 <h3 class="font-serif italic text-[1.1rem] text-parchment mb-1.5 leading-tight">28º Congresso da AJB</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Participação em "Psicologia Analítica no Brasil: origens e horizontes", discutindo as tendências e fundamentações teóricas da área no país.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Participação em "Psicologia Analítica no Brasil: origens e horizontes", discutindo as tendências e fundamentações teóricas da área no país.</p>
                             </div>
                         </div>
                     </section>
@@ -323,28 +367,28 @@
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2021 (4 meses) • Sidrolândia-MS</span>
                                 <h3 class="font-serif italic text-[1.05rem] text-parchment mb-1.5 leading-tight">Psicóloga Voluntária (CMEI)</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Condução de grupo terapêutico para colaboradores, com escuta qualificada e suporte emocional frente aos impactos laborais da pandemia.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Condução de grupo terapêutico para colaboradores, com escuta qualificada e suporte emocional frente aos impactos laborais da pandemia.</p>
                             </div>
 
                             <div class="relative pl-5 border-l border-gold/30">
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2016 (6 meses) • Curitiba-PR</span>
                                 <h3 class="font-serif italic text-[1.05rem] text-parchment mb-1.5 leading-tight">Clínica Social (Paróquia Mercês)</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Psicoterapia individual com adultos fundamentada na promoção da saúde mental e intervenção em demandas emocionais.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Psicoterapia individual com adultos fundamentada na promoção da saúde mental e intervenção em demandas emocionais.</p>
                             </div>
 
                             <div class="relative pl-5 border-l border-gold/30">
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2016 (4 meses) • Curitiba-PR</span>
                                 <h3 class="font-serif italic text-[1.05rem] text-parchment mb-1.5 leading-tight">Clínica Social (Perpétuo Socorro)</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Atendimento infantil focado no acolhimento de demandas emocionais e pedagógicas fundamentadas na escuta analítica.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Atendimento infantil focado no acolhimento de demandas emocionais e pedagógicas fundamentadas na escuta analítica.</p>
                             </div>
 
                             <div class="relative pl-5 border-l border-gold/30">
                                 <div class="absolute -left-[3.5px] top-2 w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_5px_rgba(212,192,154,0.5)]"></div>
                                 <span class="font-sans text-[0.65rem] uppercase tracking-widest text-gold mb-1 block">2008 (6 meses) • Sidrolândia-MS</span>
                                 <h3 class="font-serif italic text-[1.05rem] text-parchment mb-1.5 leading-tight">Apoio Assistencial (APAE)</h3>
-                                <p class="font-sans text-[0.9rem] text-gray-300 leading-[1.5] text-justify">Auxiliar de sala e docente de informática. Foco na estimulação sensorial, alfabetização digital e cuidados básicos para crianças.</p>
+                                <p class="font-sans text-[0.9rem] text-grayBody leading-[1.5] text-justify">Auxiliar de sala e docente de informática. Foco na estimulação sensorial, alfabetização digital e cuidados básicos para crianças.</p>
                             </div>
                         </div>
                     </section>
@@ -355,12 +399,39 @@
         </div>
     </div>
 
-    <button onclick="window.print()" class="fab-print fixed bottom-8 right-8 bg-gold text-primary p-4 rounded-xl shadow-[0_0_20px_rgba(212,192,154,0.3)] hover:bg-parchment transition-all hover:-translate-y-1 z-50 group" title="Imprimir Currículo">
-        <i data-lucide="printer" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
-    </button>
+    <!-- Contêiner de botões de ação -->
+    <div class="fab-container fixed bottom-8 right-8 flex flex-col gap-4 z-50">
+        <!-- Botão Alternar Tema -->
+        <button id="theme-toggle" class="bg-primary text-gold p-4 rounded-xl shadow-[0_0_20px_rgba(212,192,154,0.3)] hover:bg-gold hover:text-primary transition-all hover:-translate-y-1 group border border-gold/30" title="Alternar Tema (Modo Claro/Escuro)">
+            <i data-lucide="sun" class="w-6 h-6 group-hover:scale-110 transition-transform sun-icon"></i>
+            <i data-lucide="moon" class="w-6 h-6 group-hover:scale-110 transition-transform moon-icon hidden"></i>
+        </button>
+
+        <!-- Botão Imprimir -->
+        <button onclick="window.print()" class="bg-gold text-primary p-4 rounded-xl shadow-[0_0_20px_rgba(212,192,154,0.3)] hover:bg-parchment transition-all hover:-translate-y-1 group" title="Imprimir Currículo">
+            <i data-lucide="printer" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
+        </button>
+    </div>
 
     <script>
         lucide.createIcons();
+
+        // Lógica de alternância de tema
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const sunIcon = document.querySelector('.sun-icon');
+        const moonIcon = document.querySelector('.moon-icon');
+
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('light');
+            if (htmlElement.classList.contains('light')) {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        });
 
         // Script para ajustar automaticamente o zoom da página em telas menores
         function ajustarEscalaParaWeb() {
